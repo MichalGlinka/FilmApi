@@ -12,12 +12,11 @@ public class Film {
     private int id;
     private String title;
     private String description;
-    private String genre; //enum?
+    private String genre;
     private String director;
     private String poster;
 
-    public Film(int id, String title, String description, String gene, String director, String poster) {
-        this.id = id;
+    public Film(String title, String description, String gene, String director, String poster) {
         this.title = title;
         this.description = description;
         this.genre = gene;

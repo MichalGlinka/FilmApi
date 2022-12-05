@@ -1,4 +1,4 @@
-package com.example.filmapi.input;
+package com.example.filmapi.services;
 
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 
 @Service
 public class DataReciver {
-    public static final String OMDBAPI_KEY = "4d8675cf";
+    public static final String OMDBAPI_KEY = "apikey=4d8675cf";
     public static final String OMDBAPI_URL = "http://www.omdbapi.com/";
 
     public String sendRequest(String url, String [] params) {
