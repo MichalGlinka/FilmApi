@@ -27,4 +27,8 @@ public class FilmRepoService {
     public void delete(Film film){
         filmRepository.delete(film);
     }
+
+    public Film [] getFilms(){
+        return filmRepository.getFilms();
+    }
 }

@@ -18,13 +18,14 @@ public class DataReciver {
             builder.append(url);
             builder.append("?");
             for (int i = 0; i < params.length; i++) {
-                builder.append(params[i]);
+                builder.append(params[i].replace(" ","%20"));
                 if (i != (params.length - 1)){
                     builder.append("&");
                 }
             }
             url = builder.toString();
         }
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())

@@ -5,8 +5,9 @@ import com.example.filmapi.model.Status;
 import com.example.filmapi.services.DataReciver;
 import com.example.filmapi.services.FilmRepoService;
 import com.example.filmapi.services.JsonHandler;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,20 +24,36 @@ public class FilmController {
         this.repository = repository;
     }
 
-    @GetMapping("/addFavorite")
-    public String addToFavorite(@RequestParam String title){
+    @PutMapping("/addFavorite")
+    public ResponseEntity<Status> addToFavorite(@RequestParam String title){
         Status status = new Status();
-     /**  if(repository.read(title) != null){
+       if(repository.read(title) != null){
             status.setMessage("Film już jest w ulubionych");
+            return ResponseEntity.status(403).body(status);
         }else {
-       **/     repository.save(handler.createFilm(reciver.sendRequest(DataReciver.OMDBAPI_URL, new String[]{DataReciver.OMDBAPI_KEY, "t=" + title})));
+            repository.save(handler.createFilm(reciver.sendRequest(DataReciver.OMDBAPI_URL, new String[]{DataReciver.OMDBAPI_KEY, "t=" + title})));
             status.setMessage("Film został dodany do ulubionych");
-       // }
-        return status.toString();
+            return ResponseEntity.ok(status);
+        }
     }
 
     @GetMapping("/film")
-    public String getFilmByTitle(@RequestParam String title){
-        return handler.createFilm(reciver.sendRequest(DataReciver.OMDBAPI_URL, new String[]{DataReciver.OMDBAPI_KEY,"t=" + title})).toString();
+    public ResponseEntity<Film> getFilmByTitle(@RequestParam String title){
+        Film film =  handler.createFilm(reciver.sendRequest(DataReciver.OMDBAPI_URL, new String[]{DataReciver.OMDBAPI_KEY,"t=" + title}));
+        if (film.getTitle() == null) {
+            return ResponseEntity.notFound().build();
+        }else {
+            return ResponseEntity.ok(film);
+        }
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<Film[]> getAllFavoriteFilms(){
+        Film [] films = repository.getFilms();
+        if (films.length == 0){
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.ok(films);
+        }
     }
 }

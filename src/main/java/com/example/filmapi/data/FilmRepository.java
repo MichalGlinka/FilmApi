@@ -12,4 +12,7 @@ public interface FilmRepository extends CrudRepository<Film,Integer> {
 
     @Query("DELETE FROM Film f WHERE f.title = :title")
     void delete(String title);
+
+    @Query("SELECT f FROM Film f")
+    Film [] getFilms();
 }
